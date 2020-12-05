@@ -26,57 +26,101 @@ namespace APICatalogo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
+            try
+            {
             return _context.Categorias.AsNoTracking().ToList();
+            }
+            catch (System.Exception)
+            {
+
+                return StatusCode(500, "Erro ao tentar obter as categorias do banco de dados");
+            }
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
-            if(categoria == null)
+            try
             {
-                return NotFound();
+                var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+                if (categoria == null)
+                {
+                    return NotFound($"A categoria com o id={id} não foi encontrada");
+                }
+                return categoria;
             }
-            return categoria;
+            catch (System.Exception)
+            {
+
+                return StatusCode(500, "Erro ao tentar obter a categoria do banco de dados");
+            }
+
 
         }
 
         [HttpPost]
         public ActionResult Post([FromBody] Categoria categoria)
         {
-            _context.Categorias.Add(categoria);
-            _context.SaveChanges();
+            try
+            {
+                _context.Categorias.Add(categoria);
+                _context.SaveChanges();
 
-            return new CreatedAtRouteResult("ObterCategoria",
-                new { id = categoria.CategoriaId }, categoria);
+                return new CreatedAtRouteResult("ObterCategoria",
+                    new { id = categoria.CategoriaId }, categoria);
+            }
+            catch (System.Exception)
+            {
+
+                return StatusCode(500, "Erro ao tentar criar uma nova categoria");
+            }
+         
         }
 
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Categoria categoria)
         {
-            if (id != categoria.CategoriaId)
+            try
             {
-                return BadRequest();
-            }
+                if (id != categoria.CategoriaId)
+                {
+                    return BadRequest($"Não foi possível atualizar a categoria com o id={id}");
+                }
 
-            _context.Entry(categoria).State = EntityState.Modified;
-            _context.SaveChanges();
-            return Ok();
+                _context.Entry(categoria).State = EntityState.Modified;
+                _context.SaveChanges();
+                return Ok($"Categoria com o id={id} foi atualizada com sucesso");
+            }
+            catch (System.Exception)
+            {
+
+                return StatusCode(500, $"Erro ao tentar atualizar categoria com id={id}");
+            }
+          
         }
 
         [HttpDelete("{id}")]
         public ActionResult<Categoria> Delete(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
-
-            if( categoria == null )
+            try
             {
-                return NotFound();
-            }
+                var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
 
-            _context.Remove(categoria);
-            _context.SaveChanges();
-            return categoria;
+                if (categoria == null)
+                {
+                    return NotFound($"A categoria com id={id} não foi encontrada");
+                }
+
+                _context.Remove(categoria);
+                _context.SaveChanges();
+                return categoria;
+            }
+            catch (System.Exception)
+            {
+
+                return StatusCode(500, $"Erro ao excluir a categoria de id={id}");
+            }
+            
         }
     }
 }
