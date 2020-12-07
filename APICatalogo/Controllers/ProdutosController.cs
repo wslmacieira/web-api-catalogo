@@ -1,4 +1,5 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.Filter;
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,15 @@ namespace APICatalogo.Controllers
             _context = contexto;
         }
 
+        // api/produtos
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Produto>> Get()
         {
             return _context.Produtos.AsNoTracking().ToList();
         }
 
+        // api/produtos/1
         [HttpGet("{id}", Name ="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
