@@ -3,10 +3,8 @@ using APICatalogo.Filter;
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
@@ -30,7 +28,7 @@ namespace APICatalogo.Controllers
         }
 
         // api/produtos/1
-        [HttpGet("{id}", Name ="ObterProduto")]
+        [HttpGet("{id}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             //throw new Exception("Exception ao retornar produto pelo id");
@@ -38,15 +36,15 @@ namespace APICatalogo.Controllers
             //if (teste.Length > 0)
             //{ }
             var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
-            if(produto == null)
-            { 
+            if (produto == null)
+            {
                 return NotFound();
             }
             return produto;
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody]Produto produto)
+        public ActionResult Post([FromBody] Produto produto)
         {
             //if(!ModelState.IsValid)
             //{
@@ -72,12 +70,12 @@ namespace APICatalogo.Controllers
         }
 
         [HttpDelete("{id}")]
-        public  ActionResult<Produto> Delete(int id)
+        public ActionResult<Produto> Delete(int id)
         {
             var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
             //var produto = _context.Produtos.Find(id);
 
-            if(produto == null)
+            if (produto == null)
             {
                 return NotFound();
             }

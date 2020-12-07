@@ -103,7 +103,7 @@ namespace APICatalogo.Controllers
 
                 return StatusCode(500, "Erro ao tentar criar uma nova categoria");
             }
-         
+
         }
 
         [HttpPut("{id}")]
@@ -125,7 +125,7 @@ namespace APICatalogo.Controllers
 
                 return StatusCode(500, $"Erro ao tentar atualizar categoria com id={id}");
             }
-          
+
         }
 
         [HttpDelete("{id}")]
@@ -149,7 +149,7 @@ namespace APICatalogo.Controllers
 
                 return StatusCode(500, $"Erro ao excluir a categoria de id={id}");
             }
-            
+
         }
     }
 }
