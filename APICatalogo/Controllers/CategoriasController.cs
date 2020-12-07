@@ -4,6 +4,7 @@ using APICatalogo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,10 +16,12 @@ namespace APICatalogo.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
-        public CategoriasController(AppDbContext contexto, IConfiguration config)
+        private readonly ILogger _logger;
+        public CategoriasController(AppDbContext contexto, IConfiguration config, ILogger<CategoriasController> logger)
         {
             _context = contexto;
             _configuration = config;
+            _logger = logger;
         }
 
         [HttpGet("autor")]
@@ -40,6 +43,7 @@ namespace APICatalogo.Controllers
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
+            _logger.LogInformation("========= GET api/categorias/produtos =========");
             return _context.Categorias.Include(x => x.Produtos).ToList();
         }
 
@@ -48,7 +52,8 @@ namespace APICatalogo.Controllers
         {
             try
             {
-            return _context.Categorias.AsNoTracking().ToList();
+                _logger.LogInformation("========= GET api/categorias =========");
+                return _context.Categorias.AsNoTracking().ToList();
             }
             catch (System.Exception)
             {
@@ -62,9 +67,13 @@ namespace APICatalogo.Controllers
         {
             try
             {
+
                 var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+                _logger.LogInformation($"========= GET api/categorias/id = {id} =========");
+
                 if (categoria == null)
                 {
+                    _logger.LogInformation($"========= GET api/categorias/id = {id} NOT FOUND =========");
                     return NotFound($"A categoria com o id={id} não foi encontrada");
                 }
                 return categoria;
