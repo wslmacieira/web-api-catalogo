@@ -1,4 +1,5 @@
 using APICatalogo.Context;
+using APICatalogo.Extensions;
 using APICatalogo.Filter;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +48,9 @@ namespace APICatalogo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //adiciona o middleware de tratamento de erros
+            app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
 
