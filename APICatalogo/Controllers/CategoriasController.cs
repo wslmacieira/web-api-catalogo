@@ -1,6 +1,5 @@
-﻿using APICatalogo.Context;
-using APICatalogo.Models;
-using APICatalogo.Services;
+﻿using APICatalogo.Models;
+using APICatalogo.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,37 +13,20 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uof;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
-        public CategoriasController(AppDbContext contexto, IConfiguration config, ILogger<CategoriasController> logger)
+        public CategoriasController(IUnitOfWork contexto, IConfiguration config, ILogger<CategoriasController> logger)
         {
-            _context = contexto;
+            _uof = contexto;
             _configuration = config;
             _logger = logger;
-        }
-
-        [HttpGet("autor")]
-        public string GetAutor()
-        {
-            var autor = _configuration["autor"];
-            var conexao = _configuration["ConnectionStrings:DefaultConnection"];
-
-            return $"Autor : {autor} Conexão: {conexao}";
-        }
-
-        [HttpGet("saudacao/{nome}")]
-        public ActionResult<string> GetSaudacao([FromServices] IMeuServico meuservico,
-            string nome)
-        {
-            return meuservico.Saudacao(nome);
         }
 
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            _logger.LogInformation("========= GET api/categorias/produtos =========");
-            return _context.Categorias.Include(x => x.Produtos).ToList();
+            return _uof.CategoriaRepository.GetCategoriasProdutos().ToList();
         }
 
         [HttpGet]
@@ -52,8 +34,7 @@ namespace APICatalogo.Controllers
         {
             try
             {
-                _logger.LogInformation("========= GET api/categorias =========");
-                return _context.Categorias.AsNoTracking().ToList();
+                return _uof.CategoriaRepository.Get().ToList();
             }
             catch (System.Exception)
             {
@@ -68,12 +49,10 @@ namespace APICatalogo.Controllers
             try
             {
 
-                var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
-                _logger.LogInformation($"========= GET api/categorias/id = {id} =========");
+                var categoria = _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
 
                 if (categoria == null)
                 {
-                    _logger.LogInformation($"========= GET api/categorias/id = {id} NOT FOUND =========");
                     return NotFound($"A categoria com o id={id} não foi encontrada");
                 }
                 return categoria;
@@ -92,8 +71,8 @@ namespace APICatalogo.Controllers
         {
             try
             {
-                _context.Categorias.Add(categoria);
-                _context.SaveChanges();
+                _uof.CategoriaRepository.Add(categoria);
+                _uof.Commit();
 
                 return new CreatedAtRouteResult("ObterCategoria",
                     new { id = categoria.CategoriaId }, categoria);
@@ -116,8 +95,8 @@ namespace APICatalogo.Controllers
                     return BadRequest($"Não foi possível atualizar a categoria com o id={id}");
                 }
 
-                _context.Entry(categoria).State = EntityState.Modified;
-                _context.SaveChanges();
+                _uof.CategoriaRepository.Update(categoria);
+                _uof.Commit();
                 return Ok($"Categoria com o id={id} foi atualizada com sucesso");
             }
             catch (System.Exception)
@@ -133,15 +112,15 @@ namespace APICatalogo.Controllers
         {
             try
             {
-                var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+                var categoria = _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
 
                 if (categoria == null)
                 {
                     return NotFound($"A categoria com id={id} não foi encontrada");
                 }
 
-                _context.Remove(categoria);
-                _context.SaveChanges();
+                _uof.CategoriaRepository.Delete(categoria);
+                _uof.Commit();
                 return categoria;
             }
             catch (System.Exception)

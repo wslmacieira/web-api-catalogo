@@ -21,7 +21,7 @@ namespace APICatalogo.Repository
             }
         }
 
-        public ICategoriaRepository categoriaRepository
+        public ICategoriaRepository CategoriaRepository
         {
             get
             {

@@ -3,7 +3,7 @@
     public interface IUnitOfWork
     {
         IProdutoRepository ProdutoRepository { get; }
-        ICategoriaRepository categoriaRepository { get; }
+        ICategoriaRepository CategoriaRepository { get; }
 
         void Commit();
     }
