@@ -35,11 +35,23 @@ namespace APICatalogo.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>>
-            Get()
+            Get([FromQuery] CategoriasParameters categoriasParameters)
         {
             try
             {
-                var categorias = await _uof.CategoriaRepository.Get().ToListAsync();
+                var categorias = await _uof.CategoriaRepository.GetCategorias(categoriasParameters);
+
+                var metadata = new
+                {
+                    categorias.TotalCount,
+                    categorias.PageSize,
+                    categorias.CurrentPage,
+                    categorias.TotalPages,
+                    categorias.HasNext,
+                    categorias.HasPrevious,
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
                 var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
 

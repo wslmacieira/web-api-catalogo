@@ -36,9 +36,21 @@ namespace APICatalogo.Controllers
 
         // api/produtos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get([FromQuery] ProdutosParameters produtosParameters)
         {
-            var produtos = await _uof.ProdutoRepository.Get().ToListAsync();
+            var produtos = await _uof.ProdutoRepository.GetProdutos(produtosParameters);
+
+            var metadata = new
+            {
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious,
+            };
+
+            Response.Headers.Add("X-pagination", JsonConvert.SerializeObject(metadata));
             var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
 
             return produtosDto;
