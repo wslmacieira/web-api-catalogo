@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace APICatalogo.Pagination
 {
@@ -13,6 +14,8 @@ namespace APICatalogo.Pagination
 
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage < TotalPages;
+
+        public Task ToListAsync { get; internal set; }
 
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {

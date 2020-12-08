@@ -1,6 +1,7 @@
 ﻿using APICatalogo.Models;
 using APICatalogo.Pagination;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace APICatalogo.Repository
 {
@@ -8,6 +9,6 @@ namespace APICatalogo.Repository
     {
         PagedList<Categoria>
             GetCategorias(CategoriasParameters categoriasParameters);
-        IEnumerable<Categoria> GetCategoriasProdutos();
+        Task<IEnumerable<Categoria>> GetCategoriasProdutos();
     }
 }
