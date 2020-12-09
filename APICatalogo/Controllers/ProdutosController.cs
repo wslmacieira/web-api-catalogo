@@ -4,14 +4,13 @@ using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[Controller]")]
     [ApiController]
     public class ProdutosController : ControllerBase
@@ -34,6 +33,11 @@ namespace APICatalogo.Controllers
             return produtosDto;
         }
 
+        /// <summary>
+        /// Exibe uma relação dos produtos
+        /// </summary>
+        /// <param name="produtosParameters"></param>
+        /// <returns>Retorna uma lista de objetos Produto</returns>
         // api/produtos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get([FromQuery] ProdutosParameters produtosParameters)
@@ -56,6 +60,11 @@ namespace APICatalogo.Controllers
             return produtosDto;
         }
 
+        /// <summary>
+        /// Obtem um produto pelo seu id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Um objeto Produto</returns>
         // api/produtos/1
         [HttpGet("{id}", Name = "ObterProduto")]
         public async Task<ActionResult<ProdutoDTO>> Get(int id)

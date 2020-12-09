@@ -8,14 +8,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace APICatalogo
@@ -73,13 +75,32 @@ namespace APICatalogo
 
                 });
 
-            services.AddApiVersioning(options =>
+            //Swagger
+            services.AddSwaggerGen(c =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "APICatalogo",
+                    Description = "Catálogo de produtos e categroias",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "wslmacieira",
+                        Email = "wslmacieira@gmail.com",
+                        Url = new Uri("https://github.com/wslmacieira"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Usar sobre LICX",
+                        Url = new Uri("https://github.com/wslmacieira"),
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
+
 
             services.AddTransient<IMeuServico, MeuServico>();
 
@@ -118,7 +139,18 @@ namespace APICatalogo
             app.UseAuthorization();
 
             //app.UseCors(opt => opt.WithOrigins("https://www.apirequest.io").AllowAnyMethod());
-            app.UseCors();
+            //app.UseCors();
+
+            //Swagger
+            app.UseSwagger();
+
+            //SwaggerUI
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                    "APICatalogo");
+            });
+
             // adiciona middleware que executa o endpoint
             app.UseEndpoints(endpoints =>
             {

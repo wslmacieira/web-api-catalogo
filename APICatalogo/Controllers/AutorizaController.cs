@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class AutorizaController : ControllerBase
@@ -34,6 +35,11 @@ namespace APICatalogo.Controllers
                 + DateTime.Now.ToLongDateString();
         }
 
+        /// <summary>
+        /// Registra um novo usuário
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns>Status 200 e o token para o cliente</returns>
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser([FromBody] UsuarioDTO usuario)
         {
@@ -60,6 +66,12 @@ namespace APICatalogo.Controllers
             return Ok(GeraToken(usuario));
         }
 
+        /// <summary>
+        /// Verifica as credencias de um usuário
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns>Status 200 e o token para o cliente</returns>
+        /// <remarks>retorna o status 200 e o token novo</remarks>
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UsuarioDTO usuario)
         {
