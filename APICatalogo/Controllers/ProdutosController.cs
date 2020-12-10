@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Produces("application/json")]
     [Route("api/[Controller]")]
     [ApiController]

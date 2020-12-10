@@ -3,6 +3,7 @@ using APICatalogo.Models;
 using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -71,6 +72,8 @@ namespace APICatalogo.Controllers
         /// <param name="id"></param>
         /// <returns>Objetos Categoria</returns>
         [HttpGet("{id}", Name = "ObterCategoria")]
+        [ProducesResponseType(typeof(ProdutoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoriaDTO>> Get(int id)
         {
             try
@@ -79,7 +82,7 @@ namespace APICatalogo.Controllers
 
                 if (categoria == null)
                 {
-                    return NotFound($"A categoria com o id={id} não foi encontrada");
+                    return NotFound();
                 }
 
                 var categoriasDto = _mapper.Map<CategoriaDTO>(categoria);
@@ -112,6 +115,8 @@ namespace APICatalogo.Controllers
         /// <returns>O objeto categoria incluida</returns>
         /// <remarks>Retorna um objeto Categoria incluído</remarks>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Post([FromBody] CategoriaDTO categoriaDto)
         {
             try
@@ -128,12 +133,14 @@ namespace APICatalogo.Controllers
             catch (System.Exception)
             {
 
-                return StatusCode(500, "Erro ao tentar criar uma nova categoria");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao tentar criar uma nova categoria");
             }
 
         }
 
         [HttpPut("{id}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions),
+            nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] CategoriaDTO categoriaDto)
         {
             try
