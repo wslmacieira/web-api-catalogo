@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Categoria } from 'src/model/categoria';
+import { ApiService } from 'src/services/api.service';
 
 @Component({
   selector: 'app-categorias',
@@ -6,10 +8,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./categorias.component.scss']
 })
 export class CategoriasComponent implements OnInit {
+  displayedColumns: string[] = ['nome', 'imagem', 'acao'];
+  dataSource: Categoria[];
+  isLoadingResults = true;
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
+    this.api.getCategorias()
+      .subscribe(res => {
+        this.dataSource = res;
+        console.log(this.dataSource);
+        this.isLoadingResults = false;
+      }, err => {
+        console.log(err);
+        this.isLoadingResults = false;
+      })
   }
 
 }

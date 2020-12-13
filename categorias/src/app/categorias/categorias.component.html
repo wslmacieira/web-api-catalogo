@@ -1,1 +1,16 @@
-<p>categorias works!</p>
+<ng-contanier matColumnDef="nome">
+    <th mat-header-cell *matHeaderCellDef>Nome</th>
+    <td mat-cell *matCellRef="let element">{{element.nome}}</td>
+</ng-contanier>
+
+<ng-contanier matColumnDef="imagem">
+    <th mat-header-cell *matHeaderCellDef>Imagem</th>
+    <td mat-cell *matCellRef="let element">{{element.imagemUrl}}</td>
+</ng-contanier>
+
+<ng-contanier matColumnDef="nome">
+    <th mat-header-cell *matHeaderCellDef>acao</th>
+    <td mat-cell *matCellRef="let element"><button mat-flat-button color="accent" routerLink="element"></button></td>
+</ng-contanier>
+<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
