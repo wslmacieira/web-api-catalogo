@@ -2,6 +2,7 @@
 using APICatalogo.Models;
 using APICatalogo.Repository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Produces("application/json")]
     [Route("api/[Controller]")]
     [ApiController]
@@ -68,7 +69,7 @@ namespace APICatalogo.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<CategoriaDTO> Get(int id)
         {
-          
+
             var categoria = _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
 
             if (categoria == null)

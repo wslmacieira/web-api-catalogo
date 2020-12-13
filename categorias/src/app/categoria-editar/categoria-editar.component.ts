@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/services/api.service';
 
@@ -39,6 +39,18 @@ export class CategoriaEditarComponent implements OnInit {
         imagemUrl: data.imagemUrl,
       });
     });
+  }
+
+  updateCategoria(form: NgForm) {
+    this.isLoadingResults = true;
+    this.api.updateCategoria(this.categoriaId, form)
+      .subscribe(res => {
+        this.isLoadingResults = false;
+        this.router.navigate(['/categoria-detalhe' + this.categoriaId]);
+      }, (err) => {
+        console.log(err);
+        this.isLoadingResults = false;
+      })
   }
 
 }

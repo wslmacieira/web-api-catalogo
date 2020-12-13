@@ -11,10 +11,11 @@ import { CategoriaEditarComponent } from './categoria-editar/categoria-editar.co
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 
-import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatTableModule, MatToolbarModule, MatListModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatToolbarModule, MatListModule, MatTableModule } from '@angular/material';
 import { MenuComponent } from './menu/menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,22 +29,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MenuComponent
   ],
   imports: [
+    MatTableModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatInputModule,
-    MatProgressSpinnerModule,
     MatSelectModule,
     MatSidenavModule,
-    MatTableModule,
     AppRoutingModule,
     LayoutModule,
     MatToolbarModule,
     MatListModule,
+    MatTableModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

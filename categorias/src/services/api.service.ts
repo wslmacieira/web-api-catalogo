@@ -20,7 +20,7 @@ export class ApiService {
   montaHeaderToken() {
     token = localStorage.getItem("jwt");
     console.log('jwt header token ' + token);
-    httpOptions = { headers: new HttpHeaders({ "Authorization": "Bearer " + token, "Content-type": "application/json" }) };
+    httpOptions = { headers: new HttpHeaders({ "Authorization": "Bearer " + token, "Content-Type": "application/json" }) };
   }
 
   login(Usuario): Observable<Usuario> {

@@ -36,10 +36,13 @@ namespace APICatalogo
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("PermitirApiRequest",
-                builder =>
-                builder.WithOrigins("https://www.apirequest.io")
-                .WithMethods("GET"));
+                options.AddPolicy("MyPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .Build();
+                });
             });
 
             var mappingConfig = new MapperConfiguration(mc =>
@@ -82,7 +85,7 @@ namespace APICatalogo
                 {
                     Version = "v1",
                     Title = "APICatalogo",
-                    Description = "Catálogo de produtos e categroias",
+                    Description = "Catï¿½logo de produtos e categroias",
                     Contact = new OpenApiContact
                     {
                         Name = "wslmacieira",
@@ -132,14 +135,14 @@ namespace APICatalogo
             // adiciona middleware de roteamento
             app.UseRouting();
 
-            //adiciona o middleware de autenticação
+            //adiciona o middleware de autenticaï¿½ï¿½o
             app.UseAuthentication();
 
-            // adiciona middleware que habilita a autorização
+            // adiciona middleware que habilita a autorizaï¿½ï¿½o
             app.UseAuthorization();
 
             //app.UseCors(opt => opt.WithOrigins("https://www.apirequest.io").AllowAnyMethod());
-            //app.UseCors();
+            app.UseCors("MyPolicy");
 
             //Swagger
             app.UseSwagger();

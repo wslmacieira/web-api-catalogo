@@ -1,1 +1,7 @@
-<p>logout works!</p>
+<div>
+    <h3>Logout</h3>
+</div>
+<form class="example-container" [formGroup]="logoutForm" (ngSubmit)="logout()">
+    <br>
+    <button type="submit" mat-button color="primary">Fazer Logout</button>
+</form>
