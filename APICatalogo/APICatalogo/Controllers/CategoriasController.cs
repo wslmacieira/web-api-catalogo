@@ -59,6 +59,34 @@ namespace APICatalogo.Controllers
             }
         }
 
+        [HttpGet("paginacao")]
+        public ActionResult<IEnumerable<CategoriaDTO>> GetPaginacao(int pag = 1, int reg = 5)
+        {
+            try
+            {
+                if (reg > 99)
+                    reg = 5;
+
+                var categorias = _uof.CategoriaRepository
+                .LocalizaPagina<Categoria>(pag, reg)
+                .ToList();
+
+                var totalRegistros = _uof.CategoriaRepository.getTotalRegistros();
+                var numeroPaginas = ((int)Math.Ceiling((double)totalRegistros / reg));
+
+                Response.Headers["X-Total-Registros"] = totalRegistros.ToString();
+                Response.Headers["X-Numero-Paginas"] = numeroPaginas.ToString();
+
+                var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
+                return categoriasDto;
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+        }
+
         /// <summary>
         /// Obtem uma Categoria pelo seu Id
         /// </summary>

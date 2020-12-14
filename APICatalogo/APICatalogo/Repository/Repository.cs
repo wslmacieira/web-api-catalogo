@@ -1,6 +1,7 @@
 ﻿using APICatalogo.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -33,6 +34,18 @@ namespace APICatalogo.Repository
         public async Task<T> GetById(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().SingleOrDefaultAsync(predicate);
+        }
+
+        public int getTotalRegistros()
+        {
+            return _context.Set<T>().AsNoTracking().Count();
+        }
+
+        public List<T> LocalizaPagina<Tipo>(int numeroPagina, int quantidadeRegistros) where Tipo : class
+        {
+            return _context.Set<T>()
+            .Skip(quantidadeRegistros * (numeroPagina - 1))
+            .Take(quantidadeRegistros).ToList();
         }
 
         public void Update(T entity)
