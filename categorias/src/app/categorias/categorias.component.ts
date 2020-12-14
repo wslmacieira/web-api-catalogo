@@ -9,7 +9,7 @@ import { ApiService } from 'src/services/api.service';
 })
 export class CategoriasComponent implements OnInit {
   displayedColumns: string[] = ['nome', 'imagem', 'acao'];
-  dataSource: Categoria[];
+  dataSource;
   isLoadingResults = true;
 
   constructor(private api: ApiService) { }

@@ -30,10 +30,10 @@ export class ApiService {
     );
   }
 
-  getCategorias(): Observable<Categoria[]> {
+  getCategorias(): Observable<any> {
     this.montaHeaderToken();
     console.log(httpOptions.headers);
-    return this.http.get<Categoria[]>(apiUrl, httpOptions)
+    return this.http.get<any>(apiUrl, httpOptions)
       .pipe(
         tap(Categorias => console.log('leu as Categorias')),
         catchError(this.handleError('getCategorias', []))
