@@ -1,3 +1,4 @@
+using ApiCatalogo.GraphQL;
 using APICatalogo.Context;
 using APICatalogo.DTOs.Mappings;
 using APICatalogo.Logging;
@@ -153,6 +154,9 @@ namespace APICatalogo
                 c.SwaggerEndpoint("/swagger/v1/swagger.json",
                     "APICatalogo");
             });
+
+            //GraphQL
+            app.UseMiddleware<TesteGraphQLMiddleware>();
 
             // adiciona middleware que executa o endpoint
             app.UseEndpoints(endpoints =>
